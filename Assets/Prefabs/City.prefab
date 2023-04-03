@@ -221,7 +221,7 @@ MonoBehaviour:
   mpRenderer: {fileID: 8582720557245173525}
   selectedGraphic: {fileID: 3146657607145117701}
   unitName: city
-  owner: 
+  owner: Unset
   manPower: 0
   growth: 1
   isCapital: 0

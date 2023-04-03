@@ -18,9 +18,19 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
-        StartCoroutine(CalculateManpower());
+        if (owner != "Unset")
+        {
+            StartCoroutine(CalculateManpower());
+        }
+        
         unitName = NameGenerator.instance.GenerateName(gameObject.tag);
         if (nameRenderer != null && unitName != null) nameRenderer.text = unitName;
+        if (gameObject.tag == "City") gameObject.name = $"City: {unitName}";
+        else if (gameObject.tag == "Army") gameObject.name = $"Army: {unitName}";
+        else 
+        {
+            Debug.Log($"cannot find tag for {unitName}");
+        }
     }
 
     void Update()
