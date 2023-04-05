@@ -6,11 +6,13 @@ using UnityEngine.EventSystems;
 
 public class UnitManager : MonoBehaviour, IPointerClickHandler
 {
+    public FactionModule maraudersFaction;
+    public SpriteRenderer unitSprite;
     public TextMesh nameRenderer;
     public TextMesh mpRenderer;
     public SpriteRenderer selectedGraphic;
+    public FactionModule ownerFaction;
     public string unitName = "Unset";
-    public string owner = "Unset";
     public int manPower = 0;
     public int growth = 1;
     public bool isCapital = false;
@@ -18,11 +20,13 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        maraudersFaction = GameObject.Find("Marauders_Faction(Gaia)").GetComponent<FactionModule>();   
         mpRenderer.text = $"MP: {manPower}";
-        if (owner != "Unset")
+        if (ownerFaction == null) ownerFaction = maraudersFaction;
+        if (gameObject.tag == "City")
         {
-            
             StartCoroutine(CalculateManpower());
+            unitSprite.color = ownerFaction.factionColor;
         }
         
         unitName = NameGenerator.instance.GenerateName(gameObject.tag);
@@ -39,31 +43,37 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     {
     }
 
-    public UnitManager(string unitName, string owner, int manPower, int spareManpower)
+    public UnitManager(string unitName, FactionModule owner, int manPower, int spareManpower)
     {
         this.unitName = unitName;
-        this.owner = owner;
+        this.ownerFaction = owner;
         this.manPower = spareManpower;
     }
 
-    public void CityCaptured(string owner)
+    public void CityCaptured(object sender, GameEvents.OnCityCaptureEventArgs eArgs)
     {
-        this.owner = owner;
-        isAttacked = false;
-
-        StartCoroutine(CalculateManpower());
+        if (eArgs.capturedCity == this)
+        {
+            ownerFaction = eArgs.attacker.ownerFaction;
+            isAttacked = false;
+            unitSprite.color = ownerFaction.factionColor;
+            StartCoroutine(CalculateManpower());
+        }
     }
 
     IEnumerator CalculateManpower()
     {
-        mpRenderer.text = $"MP: {manPower}";
-        yield return new WaitForSeconds(1);
-        //StaticPropertyVariables.instance.secondsPerUpdate - gotta update the timer
-        if (!isAttacked)
+        if (ownerFaction != maraudersFaction)
         {
-            manPower += growth;
+            mpRenderer.text = $"MP: {manPower}";
+            yield return new WaitForSeconds(1);
+            //StaticPropertyVariables.instance.secondsPerUpdate - gotta update the timer
+            if (!isAttacked)
+            {
+                manPower += growth;
+            }
+            StartCoroutine(CalculateManpower());
         }
-        StartCoroutine(CalculateManpower());
     }
 
     public void OnPointerClick (PointerEventData eventData)

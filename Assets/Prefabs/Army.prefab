@@ -244,11 +244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981a9f0d8141844409854a029f8d39fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitSprite: {fileID: 3240114006562306090}
   nameRenderer: {fileID: 3306426055799480000}
   mpRenderer: {fileID: 3202446815487520231}
   selectedGraphic: {fileID: 0}
+  ownerFaction: {fileID: 0}
   unitName: 
-  owner: 
   manPower: 10
   growth: 0
   isCapital: 0

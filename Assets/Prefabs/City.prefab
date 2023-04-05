@@ -217,11 +217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981a9f0d8141844409854a029f8d39fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitSprite: {fileID: 3146657608098085491}
   nameRenderer: {fileID: 3595367531398704860}
   mpRenderer: {fileID: 8582720557245173525}
   selectedGraphic: {fileID: 3146657607145117701}
+  ownerFaction: {fileID: 0}
   unitName: city
-  owner: Unset
   manPower: 0
   growth: 1
   isCapital: 0

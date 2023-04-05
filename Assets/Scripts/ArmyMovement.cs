@@ -26,9 +26,12 @@ public class ArmyMovement : MonoBehaviour
     {
         if (other.gameObject == targetObject)
         {
-            if (targetUnitManager.owner == armyUnitManager.owner)
+            FactionModule targetFaction = targetUnitManager.ownerFaction;
+            FactionModule armyFaction = armyUnitManager.ownerFaction;
+
+            if (targetFaction == armyFaction)
             {
-                Debug.Log("joining city; " + targetUnitManager.owner + " " + armyUnitManager.owner);
+                Debug.Log("joining city");
                 StartCoroutine(JoinCity());
             }
             else
@@ -81,9 +84,9 @@ public class ArmyMovement : MonoBehaviour
         {
             if (targetUnitManager.tag == "City")
             {
-                Debug.Log(targetUnitManager.unitName + " has been captured!");
+                
                 StartCoroutine(JoinCity());
-                targetUnitManager.CityCaptured(armyUnitManager.owner);
+                GameEvents.instance.Events_CityCaptured(armyUnitManager, targetUnitManager);
             }
             else
             {

@@ -30,7 +30,6 @@ public class MouseSelectSystem : MonoBehaviour
 
     public void SelectObject(UnitManager selectedItem)
     {
-
         this.selectedItem = selectedItem;
         selectedItem.selectedGraphic.enabled = true;
     }
@@ -61,7 +60,7 @@ public class MouseSelectSystem : MonoBehaviour
         UnitManager armyUnitManager = army.GetComponent<UnitManager>();
 
         armyUnitManager.manPower = manPower;
-        armyUnitManager.owner = selectedItem.owner;
+        armyUnitManager.ownerFaction = selectedItem.ownerFaction;
         armyMovementScript.MoveToPosition(orderTarget.gameObject);
     }
 
@@ -76,7 +75,7 @@ public class MouseSelectSystem : MonoBehaviour
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                if (selectedItem != null && selectedItem.owner == "player")
+                if (selectedItem != null && selectedItem.ownerFaction.factionName == "player")
                 {
                     orderTarget = null;
                     GiveOrder(requestingManager);
