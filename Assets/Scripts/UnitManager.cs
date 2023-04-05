@@ -21,6 +21,7 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
         mpRenderer.text = $"MP: {manPower}";
         if (owner != "Unset")
         {
+            
             StartCoroutine(CalculateManpower());
         }
         
@@ -43,6 +44,14 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
         this.unitName = unitName;
         this.owner = owner;
         this.manPower = spareManpower;
+    }
+
+    public void CityCaptured(string owner)
+    {
+        this.owner = owner;
+        isAttacked = false;
+
+        StartCoroutine(CalculateManpower());
     }
 
     IEnumerator CalculateManpower()

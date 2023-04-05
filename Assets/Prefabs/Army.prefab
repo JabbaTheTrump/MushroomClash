@@ -268,9 +268,7 @@ MonoBehaviour:
   moveSpeed: 1
   targetObject: {fileID: 0}
   armyUnitManager: {fileID: 8624436953797327039}
-  FixedRotationObjects:
-  - {fileID: 5097716432200244262}
-  - {fileID: 3809486526358828596}
+  armySpriteTransform: {fileID: 4819451636441180018}
 --- !u!61 &8322832706749932901
 BoxCollider2D:
   m_ObjectHideFlags: 0

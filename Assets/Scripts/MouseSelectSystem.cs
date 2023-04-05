@@ -30,6 +30,7 @@ public class MouseSelectSystem : MonoBehaviour
 
     public void SelectObject(UnitManager selectedItem)
     {
+
         this.selectedItem = selectedItem;
         selectedItem.selectedGraphic.enabled = true;
     }
@@ -75,7 +76,7 @@ public class MouseSelectSystem : MonoBehaviour
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                if (selectedItem != null)
+                if (selectedItem != null && selectedItem.owner == "player")
                 {
                     orderTarget = null;
                     GiveOrder(requestingManager);

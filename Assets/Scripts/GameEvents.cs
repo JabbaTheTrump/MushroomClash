@@ -12,5 +12,6 @@ public class GameEvents : MonoBehaviour
     void Awake()
     {
         //current = this;
+        
     }
 }

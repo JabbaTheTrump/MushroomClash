@@ -8,7 +8,7 @@ public class ArmyMovement : MonoBehaviour
     public float moveSpeed = 1f;
     public GameObject targetObject;
     public UnitManager armyUnitManager;
-    public GameObject[] FixedRotationObjects;
+    public Transform armySpriteTransform;
     private UnitManager targetUnitManager;
 
 
@@ -19,7 +19,7 @@ public class ArmyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.position += transform.right * moveSpeed * Time.deltaTime;
+        transform.position += armySpriteTransform.right * moveSpeed * Time.deltaTime;
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -49,12 +49,7 @@ public class ArmyMovement : MonoBehaviour
     {
         target = target - transform.position;
         float angle = Mathf.Atan2(target.y,target.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle,Vector3.forward);
-
-        for (int i = 0; i < FixedRotationObjects.Length; i++)
-        {
-            FixedRotationObjects[i].transform.eulerAngles = new Vector3(0,0,0);
-        }
+        armySpriteTransform.rotation = Quaternion.AngleAxis(angle,Vector3.forward);
     }
 
     IEnumerator JoinCity()
@@ -87,9 +82,8 @@ public class ArmyMovement : MonoBehaviour
             if (targetUnitManager.tag == "City")
             {
                 Debug.Log(targetUnitManager.unitName + " has been captured!");
-                targetUnitManager.owner = armyUnitManager.owner;
-                targetUnitManager.isAttacked = false;
                 StartCoroutine(JoinCity());
+                targetUnitManager.CityCaptured(armyUnitManager.owner);
             }
             else
             {
