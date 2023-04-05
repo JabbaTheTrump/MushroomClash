@@ -18,6 +18,7 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        mpRenderer.text = $"MP: {manPower}";
         if (owner != "Unset")
         {
             StartCoroutine(CalculateManpower());

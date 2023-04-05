@@ -8,7 +8,7 @@ public class ArmyMovement : MonoBehaviour
     public float moveSpeed = 1f;
     public GameObject targetObject;
     public UnitManager armyUnitManager;
-    public TextMesh unitMP;
+    public GameObject[] FixedRotationObjects;
     private UnitManager targetUnitManager;
 
 
@@ -50,7 +50,11 @@ public class ArmyMovement : MonoBehaviour
         target = target - transform.position;
         float angle = Mathf.Atan2(target.y,target.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle,Vector3.forward);
-        unitMP.transform.eulerAngles = new Vector3(0, 0, 0);
+
+        for (int i = 0; i < FixedRotationObjects.Length; i++)
+        {
+            FixedRotationObjects[i].transform.eulerAngles = new Vector3(0,0,0);
+        }
     }
 
     IEnumerator JoinCity()
