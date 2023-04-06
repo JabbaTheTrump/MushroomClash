@@ -20,6 +20,8 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        GameEvents.instance.OnCityCapture += CityCaptured;
+
         maraudersFaction = GameObject.Find("Marauders_Faction(Gaia)").GetComponent<FactionModule>();   
         mpRenderer.text = $"MP: {manPower}";
         if (ownerFaction == null) ownerFaction = maraudersFaction;
@@ -55,6 +57,8 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
         if (eArgs.capturedCity == this)
         {
             ownerFaction = eArgs.attacker.ownerFaction;
+            
+            ownerFaction.ownedCities.Add(this);
             isAttacked = false;
             unitSprite.color = ownerFaction.factionColor;
             StartCoroutine(CalculateManpower());

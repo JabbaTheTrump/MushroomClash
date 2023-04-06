@@ -7,7 +7,7 @@ public class FactionModule : MonoBehaviour
     public int gold;
     public string factionName;
     public UnitManager capital;
-    public UnitManager[] ownedCities;
+    public List<UnitManager> ownedCities;
     public Color factionColor;
 
     private void Awake() {
