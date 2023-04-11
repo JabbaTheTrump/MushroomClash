@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class UnitManager : MonoBehaviour, IPointerClickHandler
 {
-    public FactionModule maraudersFaction;
     public SpriteRenderer unitSprite;
     public TextMesh nameRenderer;
     public TextMesh mpRenderer;
@@ -17,28 +16,34 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     public int growth = 1;
     public bool isCapital = false;
     public bool isAttacked;
-
+    
+    
     void Start()
     {
-        GameEvents.instance.OnCityCapture += CityCaptured;
+        #region GameEvent subbing
+        #endregion
 
-        maraudersFaction = GameObject.Find("Marauders_Faction(Gaia)").GetComponent<FactionModule>();   
+        //Display the initial manpower
         mpRenderer.text = $"MP: {manPower}";
-        if (ownerFaction == null) ownerFaction = maraudersFaction;
+
+        #region Initialize as marauders if faction is null
+        if (ownerFaction == null) ownerFaction = GameObject.Find("Marauders_Faction(Gaia)").GetComponent<FactionModule>();
+
         if (gameObject.tag == "City")
         {
             StartCoroutine(CalculateManpower());
-            unitSprite.color = ownerFaction.factionColor;
         }
-        
+        #endregion
+
+        #region Initialize as faction member
+        ownerFaction.AddCity(this);
+        #endregion
+
+        #region Unit naming
         unitName = NameGenerator.instance.GenerateName(gameObject.tag);
+        gameObject.name = unitName;
         if (nameRenderer != null && unitName != null) nameRenderer.text = unitName;
-        if (gameObject.tag == "City") gameObject.name = $"City: {unitName}";
-        else if (gameObject.tag == "Army") gameObject.name = $"Army: {unitName}";
-        else 
-        {
-            Debug.Log($"cannot find tag for {unitName}");
-        }
+        #endregion
     }
 
     void Update()
@@ -52,22 +57,17 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
         this.manPower = spareManpower;
     }
 
-    public void CityCaptured(object sender, GameEvents.OnCityCaptureEventArgs eArgs)
+    public void CityCaptured(FactionModule attackingFaction)
     {
-        if (eArgs.capturedCity == this)
-        {
-            ownerFaction = eArgs.attacker.ownerFaction;
-            
-            ownerFaction.ownedCities.Add(this);
-            isAttacked = false;
-            unitSprite.color = ownerFaction.factionColor;
-            StartCoroutine(CalculateManpower());
-        }
+        ownerFaction = attackingFaction;
+        isAttacked = false;
+        StartCoroutine(CalculateManpower());
+
     }
 
     IEnumerator CalculateManpower()
     {
-        if (ownerFaction != maraudersFaction)
+        if (ownerFaction.factionName != "marauders")
         {
             mpRenderer.text = $"MP: {manPower}";
             yield return new WaitForSeconds(1);

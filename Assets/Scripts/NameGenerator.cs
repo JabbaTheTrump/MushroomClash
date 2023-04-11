@@ -35,6 +35,7 @@ public class NameGenerator : MonoBehaviour
         {
             generatedName = GenerateCityName();
             existingCities.Add(generatedName);
+            Debug.Log(generatedName);
             return generatedName;
         }
         else if (tag == "Army")
