@@ -55,7 +55,7 @@ public class ArmyMovement : MonoBehaviour
         armySpriteTransform.rotation = Quaternion.AngleAxis(angle,Vector3.forward);
     }
 
-    IEnumerator JoinCity()
+    IEnumerator JoinCity() //when an army is reinforcing a friendly city
     {
         yield return new WaitForSeconds(1f);
         targetUnitManager.manPower += armyUnitManager.manPower;
@@ -67,19 +67,27 @@ public class ArmyMovement : MonoBehaviour
     {
         moveSpeed = 0;
         targetUnitManager.isAttacked = true;
+
         Debug.Log(targetUnitManager.unitName + " is being attacked!");
+
+        //attack loop (reduces MP)
         while (armyUnitManager.manPower > 0 && targetUnitManager.manPower > 0)
         {
             armyUnitManager.manPower--;
+            armyUnitManager.UpdateManpower();
             targetUnitManager.manPower--;
+            targetUnitManager.UpdateManpower();
             yield return new WaitForSeconds(0.2f);
         }
         
+        //what happens if the attacking army is wiped out
         if (armyUnitManager.manPower <= 0)
         {
             targetUnitManager.isAttacked = false;
             Destroy(gameObject);
         }
+
+        //what happens if the attacking army wins
         else
         {
             if (targetUnitManager.tag == "City")

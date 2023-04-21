@@ -38,11 +38,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FilterTex:
-        m_Texture: {fileID: 2800000, guid: 116be3a1022745846acb5e0f308fbccb, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1957ca3aad0980a49b58121a0f0cdfda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 46cf1ecc3a730b4438a10739f9e05d01, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:

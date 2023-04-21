@@ -69,15 +69,20 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     {
         if (ownerFaction.factionName != "marauders")
         {
-            mpRenderer.text = $"MP: {manPower}";
+            UpdateManpower();
             yield return new WaitForSeconds(1);
             //StaticPropertyVariables.instance.secondsPerUpdate - gotta update the timer
             if (!isAttacked)
             {
                 manPower += growth;
+                StartCoroutine(CalculateManpower());
             }
-            StartCoroutine(CalculateManpower());
         }
+    }
+
+    public void UpdateManpower()
+    {
+        mpRenderer.text = $"MP: {manPower}";
     }
 
     public void OnPointerClick (PointerEventData eventData)
