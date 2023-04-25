@@ -6,6 +6,15 @@ using UnityEngine.EventSystems;
 
 public class UnitManager : MonoBehaviour, IPointerClickHandler
 {
+    public enum UnitTypes
+    {
+        Town,
+        Mine,
+        Forest,
+        Army
+    }
+
+    public UnitTypes unitType;
     public SpriteRenderer unitSprite;
     public TextMesh nameRenderer;
     public TextMesh mpRenderer;
@@ -14,6 +23,7 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     public string unitName = "Unset";
     public int manPower = 0;
     public int growth = 1;
+    public int goldIncome = 10;
     public bool isCapital = false;
     public bool isAttacked;
     

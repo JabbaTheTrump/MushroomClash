@@ -35,7 +35,6 @@ public class NameGenerator : MonoBehaviour
         {
             generatedName = GenerateCityName();
             existingCities.Add(generatedName);
-            Debug.Log(generatedName);
             return generatedName;
         }
         else if (tag == "Army")
@@ -95,7 +94,6 @@ public class NameGenerator : MonoBehaviour
         }
 
         string name = $"{armyNumber}{numberSuffix} {title} {type}";
-        Debug.Log(name);
         return name;
     }
 }

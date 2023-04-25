@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FactionModule : MonoBehaviour
 {
-    public int gold;
+    public int gold = 0;
     public int kothScore = 0;
     public string factionName;
     public UnitManager capital;
@@ -13,7 +14,15 @@ public class FactionModule : MonoBehaviour
 
     private void Start()
     {
+        if (capital == null)
+        {
+            capital = ownedCities[0];
+        }
+
+        ownedCities.Add(capital);
+        TickIncome();
         GameEvents.instance.OnCityCapture += CityCaptured;
+        GameEvents.instance.OnIncomeTick += TickIncome;
     }
 
     public void CityCaptured(object sender, GameEvents.OnCityCaptureEventArgs eArgs)
@@ -46,5 +55,14 @@ public class FactionModule : MonoBehaviour
         {
             Debug.Log("AssignFactionColorToCity(): City faction doesn't match the faction module");
         }
+    }
+
+    private void TickIncome()
+    {
+        for (int i = 0; i < ownedCities.Count; i++)
+        {
+            gold += ownedCities[i].goldIncome;
+        }
+        Debug.Log(gold);
     }
 }
