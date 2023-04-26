@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class FactionModule : MonoBehaviour
 {
+    public bool eliminated = false;
     public int gold = 0;
     public int kothScore = 0;
     public string factionName;
@@ -16,26 +17,49 @@ public class FactionModule : MonoBehaviour
     {
         if (capital == null)
         {
-            capital = ownedCities[0];
+            if (ownedCities.Count != 0)
+            {
+                capital = ownedCities[0];
+                ownedCities[0].isCapital = true;
+            }
+            else
+            {
+                Debug.Log("No city exists for faction " + factionName);
+            }
         }
 
-        ownedCities.Add(capital);
-        TickIncome();
+        
+
         GameEvents.instance.OnCityCapture += CityCaptured;
         GameEvents.instance.OnIncomeTick += TickIncome;
+    }
+
+    public void FactionEliminated()
+    {
+        eliminated = true;
+        for (int i = 0; i < ownedCities.Count; i++)
+        {
+            GameEvents.instance.Events_CityCaptured(StaticPropertyVariables.ins.MaraudersFaction, ownedCities[i]);
+        }
     }
 
     public void CityCaptured(object sender, GameEvents.OnCityCaptureEventArgs eArgs)
     {
         UnitManager capturedCity = eArgs.capturedCity;
-        if (eArgs.attacker.ownerFaction == this)
+
+        if (eArgs.attackingFaction == this)
         {
             AddCity(capturedCity);
         }
         else if (capturedCity.ownerFaction == this)
         {
-            capturedCity.CityCaptured(eArgs.attacker.ownerFaction);
+            capturedCity.CityCaptured(eArgs.attackingFaction);
             ownedCities.Remove(capturedCity);
+
+            if (capturedCity == capital)
+            {
+                GameEvents.instance.Events_FactionEliminated(capturedCity.ownerFaction, eArgs.attackingFaction);
+            }
         }
     }
 
@@ -63,6 +87,5 @@ public class FactionModule : MonoBehaviour
         {
             gold += ownedCities[i].goldIncome;
         }
-        Debug.Log(gold);
     }
 }

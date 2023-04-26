@@ -28,26 +28,36 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     public bool isAttacked;
     
     
+    void Awake()
+    {
+
+    }
+
     void Start()
     {
-        #region GameEvent subbing
-        #endregion
-
-        //Display the initial manpower
-        mpRenderer.text = $"MP: {manPower}";
-
         #region Initialize as marauders if faction is null
-        if (ownerFaction == null) ownerFaction = GameObject.Find("Marauders_Faction(Gaia)").GetComponent<FactionModule>();
+        if (ownerFaction == null) ownerFaction = StaticPropertyVariables.ins.MaraudersFaction;
+        #endregion
 
         if (gameObject.tag == "City")
         {
             StartCoroutine(CalculateManpower());
         }
-        #endregion
+
+        if (ownerFaction.factionName != "marauders")
+        {
+            StartCoroutine(CalculateManpower());
+        }
 
         #region Initialize as faction member
         ownerFaction.AddCity(this);
         #endregion
+
+        #region GameEvent subbing
+        #endregion
+
+        //Display the initial manpower
+        mpRenderer.text = $"MP: {manPower}";
 
         #region Unit naming
         unitName = NameGenerator.instance.GenerateName(gameObject.tag);
@@ -58,6 +68,7 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
+        UpdateManpower();
     }
 
     public UnitManager(string unitName, FactionModule owner, int manPower, int spareManpower)
@@ -71,27 +82,20 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
     {
         ownerFaction = attackingFaction;
         isAttacked = false;
-        StartCoroutine(CalculateManpower());
-
     }
 
-    IEnumerator CalculateManpower()
+    public IEnumerator CalculateManpower()
     {
-        if (ownerFaction.factionName != "marauders")
+        for (; ;)
         {
-            UpdateManpower();
-            yield return new WaitForSeconds(1);
-            //StaticPropertyVariables.instance.secondsPerUpdate - gotta update the timer
-            if (!isAttacked)
-            {
-                manPower += growth;
-                StartCoroutine(CalculateManpower());
-            }
+            if(!isAttacked) manPower += growth;
+            yield return new WaitForSeconds(StaticPropertyVariables.ins.secondsPerUpdate);
         }
     }
 
     public void UpdateManpower()
     {
+        if (manPower < 0) manPower = 0;
         mpRenderer.text = $"MP: {manPower}";
     }
 

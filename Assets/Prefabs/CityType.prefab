@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 3146657608932929075}
   - component: {fileID: 3146657608932929072}
   m_Layer: 0
-  m_Name: City
+  m_Name: CityType
   m_TagString: City
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -9,14 +9,26 @@ public class GameEvents : MonoBehaviour
     public delegate void IncomeTickDel();
     public static GameEvents instance;
     public float incomeTickDelay = 1;
+
     public Action OnIncomeTick;
+
+    #region OnCityCapture_Event
     public event EventHandler<OnCityCaptureEventArgs> OnCityCapture;
+
     public class OnCityCaptureEventArgs : EventArgs {
-        public UnitManager attacker;
+        public FactionModule attackingFaction;
         public UnitManager capturedCity;
     }
+    #endregion
 
-    
+    public event EventHandler<OnFactionEliminatedEventArgs> OnFactionEliminated;
+
+    public class OnFactionEliminatedEventArgs : EventArgs {
+        public FactionModule faction;
+        public FactionModule eliminatingFaction;
+    }
+
+
     void Awake()
     {
         if (instance == null)
@@ -31,18 +43,25 @@ public class GameEvents : MonoBehaviour
         StartCoroutine(Events_IncomeTick());
     }
 
-    public void Events_CityCaptured(UnitManager attacker, UnitManager capturedCity)
+    public void Events_FactionEliminated(FactionModule faction, FactionModule eliminatingFaction)
+    {
+        Debug.Log(faction.factionName + " Has Been Eliminated by " + eliminatingFaction.factionName);
+        OnFactionEliminated?.Invoke(this, new OnFactionEliminatedEventArgs {faction = faction, eliminatingFaction = eliminatingFaction });
+
+        faction.FactionEliminated();
+    }
+
+    public void Events_CityCaptured(FactionModule attackingFaction, UnitManager capturedCity)
     {
         Debug.Log(capturedCity.unitName + " has been captured!");
-        OnCityCapture?.Invoke(this, new OnCityCaptureEventArgs{attacker = attacker, capturedCity = capturedCity});
+        OnCityCapture?.Invoke(this, new OnCityCaptureEventArgs{ attackingFaction = attackingFaction, capturedCity = capturedCity});
     }
 
     IEnumerator Events_IncomeTick()
     {
         while(true)
         {
-            new WaitForSeconds(incomeTickDelay);
-            Debug.Log("Income tick");
+            yield return new WaitForSeconds(incomeTickDelay);
             OnIncomeTick?.Invoke();
         }
     }

@@ -70,19 +70,24 @@ public class ArmyMovement : MonoBehaviour
 
         Debug.Log(targetUnitManager.unitName + " is being attacked!");
 
+
         //attack loop (reduces MP)
         while (armyUnitManager.manPower > 0 && targetUnitManager.manPower > 0)
         {
-            armyUnitManager.manPower--;
-            armyUnitManager.UpdateManpower();
-            targetUnitManager.manPower--;
-            targetUnitManager.UpdateManpower();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(StaticPropertyVariables.ins.battleSpeed);
+            int armyManpower = armyUnitManager.manPower;
+            int cityManpower = targetUnitManager.manPower;
+            int casualtyRate = Mathf.CeilToInt(0.05f * Mathf.Max(armyManpower, cityManpower));
+            int casualties = 1 + Random.Range(casualtyRate, 2 * casualtyRate);
+            Debug.Log("casualties: " + casualties);
+            armyUnitManager.manPower -= casualties;
+            targetUnitManager.manPower -= casualties;
         }
         
         //what happens if the attacking army is wiped out
         if (armyUnitManager.manPower <= 0)
         {
+            StartCoroutine(targetUnitManager.CalculateManpower());
             targetUnitManager.isAttacked = false;
             Destroy(gameObject);
         }
@@ -94,7 +99,7 @@ public class ArmyMovement : MonoBehaviour
             {
                 
                 StartCoroutine(JoinCity());
-                GameEvents.instance.Events_CityCaptured(armyUnitManager, targetUnitManager);
+                GameEvents.instance.Events_CityCaptured(armyUnitManager.ownerFaction, targetUnitManager);
             }
             else
             {
