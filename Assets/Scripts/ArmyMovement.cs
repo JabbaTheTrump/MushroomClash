@@ -87,7 +87,6 @@ public class ArmyMovement : MonoBehaviour
         //what happens if the attacking army is wiped out
         if (armyUnitManager.manPower <= 0)
         {
-            StartCoroutine(targetUnitManager.CalculateManpower());
             targetUnitManager.isAttacked = false;
             Destroy(gameObject);
         }
@@ -97,9 +96,8 @@ public class ArmyMovement : MonoBehaviour
         {
             if (targetUnitManager.tag == "City")
             {
-                
+                targetUnitManager.CityCaptured(armyUnitManager.ownerFaction);
                 StartCoroutine(JoinCity());
-                GameEvents.instance.Events_CityCaptured(armyUnitManager.ownerFaction, targetUnitManager);
             }
             else
             {

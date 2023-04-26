@@ -45,10 +45,7 @@ public class GameEvents : MonoBehaviour
 
     public void Events_FactionEliminated(FactionModule faction, FactionModule eliminatingFaction)
     {
-        Debug.Log(faction.factionName + " Has Been Eliminated by " + eliminatingFaction.factionName);
-        OnFactionEliminated?.Invoke(this, new OnFactionEliminatedEventArgs {faction = faction, eliminatingFaction = eliminatingFaction });
-
-        faction.FactionEliminated();
+        OnFactionEliminated?.Invoke(this, new OnFactionEliminatedEventArgs { faction = faction, eliminatingFaction = eliminatingFaction });
     }
 
     public void Events_CityCaptured(FactionModule attackingFaction, UnitManager capturedCity)

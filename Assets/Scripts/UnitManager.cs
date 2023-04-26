@@ -39,12 +39,8 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
         if (ownerFaction == null) ownerFaction = StaticPropertyVariables.ins.MaraudersFaction;
         #endregion
 
-        if (gameObject.tag == "City")
-        {
-            StartCoroutine(CalculateManpower());
-        }
 
-        if (ownerFaction.factionName != "marauders")
+        if (gameObject.tag == "City")
         {
             StartCoroutine(CalculateManpower());
         }
@@ -80,15 +76,27 @@ public class UnitManager : MonoBehaviour, IPointerClickHandler
 
     public void CityCaptured(FactionModule attackingFaction)
     {
+        ownerFaction.RemoveCity(this);
+        attackingFaction.AddCity(this);
+
+        if (isCapital)
+        {
+            ownerFaction.FactionEliminated(attackingFaction);
+        }
+
         ownerFaction = attackingFaction;
+
         isAttacked = false;
     }
 
     public IEnumerator CalculateManpower()
     {
-        for (; ;)
+        for (; ; )
         {
-            if(!isAttacked) manPower += growth;
+            if (ownerFaction != StaticPropertyVariables.ins.MaraudersFaction && !isAttacked)
+            {
+                manPower += growth;
+            }
             yield return new WaitForSeconds(StaticPropertyVariables.ins.secondsPerUpdate);
         }
     }

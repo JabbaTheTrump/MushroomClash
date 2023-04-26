@@ -80,7 +80,7 @@ Material:
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FactionColor: {r: 0.6603774, g: 0.22739409, b: 0.6161308, a: 0}
+    - _FactionColor: {r: 0.2296379, g: 0.5754717, b: 0.19218579, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _OldSpriteColor: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

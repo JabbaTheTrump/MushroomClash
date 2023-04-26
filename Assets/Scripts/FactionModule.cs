@@ -29,37 +29,18 @@ public class FactionModule : MonoBehaviour
         }
 
         
-
-        GameEvents.instance.OnCityCapture += CityCaptured;
         GameEvents.instance.OnIncomeTick += TickIncome;
     }
 
-    public void FactionEliminated()
+    public void FactionEliminated(FactionModule eliminatingFaction)
     {
+        Debug.Log(factionName + " Has Been Eliminated by " + eliminatingFaction.factionName);
+        GameEvents.instance.Events_FactionEliminated(this, eliminatingFaction);
         eliminated = true;
+
         for (int i = 0; i < ownedCities.Count; i++)
         {
             GameEvents.instance.Events_CityCaptured(StaticPropertyVariables.ins.MaraudersFaction, ownedCities[i]);
-        }
-    }
-
-    public void CityCaptured(object sender, GameEvents.OnCityCaptureEventArgs eArgs)
-    {
-        UnitManager capturedCity = eArgs.capturedCity;
-
-        if (eArgs.attackingFaction == this)
-        {
-            AddCity(capturedCity);
-        }
-        else if (capturedCity.ownerFaction == this)
-        {
-            capturedCity.CityCaptured(eArgs.attackingFaction);
-            ownedCities.Remove(capturedCity);
-
-            if (capturedCity == capital)
-            {
-                GameEvents.instance.Events_FactionEliminated(capturedCity.ownerFaction, eArgs.attackingFaction);
-            }
         }
     }
 
@@ -69,16 +50,14 @@ public class FactionModule : MonoBehaviour
         AssignFactionColorToCity(city);
     }
 
+    public void RemoveCity(UnitManager city)
+    {
+        ownedCities.Remove(city);
+    }
+
     private void AssignFactionColorToCity(UnitManager city)
     {
-        if (city.ownerFaction == this)
-        {
-            city.unitSprite.material.SetColor("_FactionColor", factionColor);
-        }
-        else
-        {
-            Debug.Log("AssignFactionColorToCity(): City faction doesn't match the faction module");
-        }
+        city.unitSprite.material.SetColor("_FactionColor", factionColor);
     }
 
     private void TickIncome()
