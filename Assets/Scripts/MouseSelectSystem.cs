@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class MouseSelectSystem : MonoBehaviour
 {
     public ArmyCreationSlider sliderScript;
-    public GameObject armyTemplate;
     public static MouseSelectSystem instance;
     public UnitManager selectedItem;
     public UnitManager orderTarget;
@@ -40,28 +39,9 @@ public class MouseSelectSystem : MonoBehaviour
 
         if (selectedItem != orderTarget)
         {
-            if (orderTarget.gameObject.tag == "City")
-            {
-                sliderScript.transform.parent.gameObject.SetActive(true);
-                sliderScript.InitiateSlider(selectedItem);
-            }
+            sliderScript.transform.parent.gameObject.SetActive(true);
+            sliderScript.InitiateSlider(selectedItem, orderTarget);
         }
-    }
-
-
-
-    public void CreateArmy(int manPower)
-    {
-        Vector3 spawnPoint;
-        
-        spawnPoint = selectedItem.transform.position;
-        GameObject army = Instantiate(armyTemplate,spawnPoint, new Quaternion(0,0,0,0));
-        ArmyMovement armyMovementScript = army.GetComponent<ArmyMovement>();
-        UnitManager armyUnitManager = army.GetComponent<UnitManager>();
-
-        armyUnitManager.manPower = manPower;
-        armyUnitManager.ownerFaction = selectedItem.ownerFaction;
-        armyMovementScript.MoveToPosition(orderTarget.gameObject);
     }
 
     public void ProcessClick(PointerEventData eventData, UnitManager requestingManager)

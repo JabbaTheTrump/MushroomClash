@@ -9,18 +9,20 @@ public class ArmyCreationSlider : MonoBehaviour
     public Slider sliderComponent;
     public TextMeshProUGUI manPowerText;
     public int maxManpower;
-    private UnitManager city;
+    private UnitManager originCity;
+    private UnitManager targetCity;
     
     void Start()
     {
         sliderComponent.onValueChanged.AddListener(delegate{ValueChangeCheck();});
     }
 
-    public void InitiateSlider(UnitManager city)
+    public void InitiateSlider(UnitManager originCity, UnitManager targetCity)
     {
-        this.city = city;
+        this.originCity = originCity;
+        this.targetCity = targetCity;
         MouseSelectSystem.instance.controlsEnabled = false;
-        maxManpower = city.manPower;
+        maxManpower = originCity.manPower;
         sliderComponent.maxValue = maxManpower;
     }
 
@@ -33,8 +35,7 @@ public class ArmyCreationSlider : MonoBehaviour
     {
         if (sliderComponent.value > 0)
         {
-            city.manPower -= (int) sliderComponent.value;
-            MouseSelectSystem.instance.CreateArmy((int) sliderComponent.value);
+            ArmyCreation.instance.CreateArmy((int) sliderComponent.value, originCity, targetCity);
             RemoveSlider();
         }
     }
