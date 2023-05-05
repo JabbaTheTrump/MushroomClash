@@ -7,6 +7,7 @@ public class FactionModule : MonoBehaviour
 {
     public bool eliminated = false;
     public int gold = 0;
+    public int goldIncome = 100;
     public int kothScore = 0;
     public string factionName;
     public UnitManager capital;
@@ -30,6 +31,23 @@ public class FactionModule : MonoBehaviour
 
         
         GameEvents.instance.OnIncomeTick += TickIncome;
+    }
+
+    private void Update()
+    {
+        CalculateIncome();
+    }
+
+    private void CalculateIncome()
+    {
+        int income = 0;
+
+        for (int i = 0; i < ownedCities.Count; i++)
+        {
+            income += ownedCities[i].goldIncome;
+        }
+
+        goldIncome = income;
     }
 
     public void FactionEliminated(FactionModule eliminatingFaction)
@@ -60,11 +78,11 @@ public class FactionModule : MonoBehaviour
         city.unitSprite.material.SetColor("_FactionColor", factionColor);
     }
 
-    private void TickIncome()
+    public void TickIncome()
     {
-        for (int i = 0; i < ownedCities.Count; i++)
+        if (gold < 1000000)
         {
-            gold += ownedCities[i].goldIncome;
+            gold += goldIncome;
         }
     }
 }

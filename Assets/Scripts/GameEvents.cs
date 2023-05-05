@@ -8,7 +8,7 @@ public class GameEvents : MonoBehaviour
 {
     public delegate void IncomeTickDel();
     public static GameEvents instance;
-    public float incomeTickDelay = 1;
+    public float incomeTickDelay = 5;
 
     public Action OnIncomeTick;
 

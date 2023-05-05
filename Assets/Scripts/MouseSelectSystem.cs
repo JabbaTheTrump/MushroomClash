@@ -30,7 +30,8 @@ public class MouseSelectSystem : MonoBehaviour
     public void SelectObject(UnitManager selectedItem)
     {
         this.selectedItem = selectedItem;
-        selectedItem.selectedGraphic.enabled = true;
+        if (selectedItem.selectedGraphic != null) selectedItem.selectedGraphic.enabled = true;
+        AI_Evaluators.ins.FindClosestCity(selectedItem, true);
     }
 
     public void GiveOrder(UnitManager orderTarget)
