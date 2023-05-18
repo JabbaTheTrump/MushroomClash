@@ -8,6 +8,8 @@ public class FactionModule : MonoBehaviour
     public bool eliminated = false;
     public int gold = 0;
     public int goldIncome = 100;
+
+    public float combatPower = 1;
     public int kothScore = 0;
     public string factionName;
     public UnitManager capital;
