@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,7 +32,6 @@ public class MouseSelectSystem : MonoBehaviour
     {
         this.selectedItem = selectedItem;
         if (selectedItem.selectedGraphic != null) selectedItem.selectedGraphic.enabled = true;
-        AI_Evaluators.ins.FindClosestCity(selectedItem, true);
     }
 
     public void GiveOrder(UnitManager orderTarget)
@@ -51,17 +51,22 @@ public class MouseSelectSystem : MonoBehaviour
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
+                Debug.Log("left click");
                 SelectObject(requestingManager);
                 Debug.Log("city selected: " + requestingManager.unitName);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
+                Console.WriteLine("right click");
                 if (selectedItem != null && selectedItem.ownerFaction.factionName == "player")
                 {
                     orderTarget = null;
                     GiveOrder(requestingManager);
                 }
             }
+
+            else
+                Console.WriteLine("void click");
         }
     }
 

@@ -22,18 +22,24 @@ public class CameraSystem : MonoBehaviour
 
     private void HandleEdgeScrolling()
     {
-        Vector2 mousePos = Mouse.current.position.ReadValue();
+        if (MouseSelectSystem.instance.controlsEnabled)
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
 
-        if (mousePos.x < edgeScrollSize) v3Dir.x = -1f;
-        if (mousePos.y < edgeScrollSize) v3Dir.y = -1f;
-        if (mousePos.x > Screen.width - edgeScrollSize) v3Dir.x = 1f;
-        if (mousePos.y > Screen.height - edgeScrollSize) v3Dir.y = 1f;
+            if (mousePos.x < edgeScrollSize) v3Dir.x = -1f;
+            if (mousePos.y < edgeScrollSize) v3Dir.y = -1f;
+            if (mousePos.x > Screen.width - edgeScrollSize) v3Dir.x = 1f;
+            if (mousePos.y > Screen.height - edgeScrollSize) v3Dir.y = 1f;
+        }
     }
 
     private void HandleKeyScrolling()
     {
-        moveDir = inputAction.ReadValue<Vector2>();
-        v3Dir = moveDir;
+        if (MouseSelectSystem.instance.controlsEnabled)
+        {
+            moveDir = inputAction.ReadValue<Vector2>();
+            v3Dir = moveDir;
+        }
     }
 
     private void OnEnable() {

@@ -19,6 +19,7 @@ public class ArmyCreationSlider : MonoBehaviour
 
     public void InitiateSlider(UnitManager originCity, UnitManager targetCity)
     {
+        Debug.Log("opening slider");
         this.originCity = originCity;
         this.targetCity = targetCity;
         MouseSelectSystem.instance.controlsEnabled = false;

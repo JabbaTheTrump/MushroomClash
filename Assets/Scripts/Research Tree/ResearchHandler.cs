@@ -19,8 +19,12 @@ public class ResearchHandler : MonoBehaviour
 
     public void StartResearch(ResearchNode researchData)
     {
-        currentResearch = researchData;
-        StartCoroutine(Research());
+        if (currentResearch == null)
+        {
+            TestIfResearchable(researchData);
+            currentResearch = researchData;
+            StartCoroutine(Research());
+        }
     }
 
     IEnumerator Research()
@@ -40,9 +44,31 @@ public class ResearchHandler : MonoBehaviour
         }
     }
 
+    public bool TestIfResearchable(ResearchNode researchData)
+    {
+        ResearchNode[] researchPrerequisites = researchData.researchPrerequisites;
+        if (researchPrerequisites == null || researchPrerequisites.Length == 0)
+        {
+            return true;
+        }
+
+        bool unlockedAllPrequesits = true;
+
+        for (int i = 0; i < researchPrerequisites.Length; i++)
+        {
+            if (!researchPrerequisites[i].researched)
+            {
+                unlockedAllPrequesits = false;
+            }
+        }
+
+        return unlockedAllPrequesits;
+    }
+
     private void ResearchCompleted()
     {
         unlockedResearch.Add(currentResearch);
+        currentResearch = null;
         ActivateResearch();
     }
 
@@ -66,4 +92,5 @@ public class ResearchHandler : MonoBehaviour
             siegeLevel = currentResearch.value;
         }
     }
+
 }
